@@ -13,7 +13,7 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
             <a class="navbar-brand" href="/">
-                <img src="~/images/sv.jpg" width="30" height="30" alt="logo" />
+                <img src="~/images/sv.jpg" width="30" height="30" alt="logo" asp-append-version="true" />
                 BookStore
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,16 +23,19 @@
             <div class="collapse navbar-collapse d-sm-inline-flex " id="navbarSupportedContent">
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" href="/Home/index">Home</a>
+                        <a class="nav-link text-dark" asp-controller="Home" asp-action="index">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" href="/Home/aboutus">About Us</a>
+                        <a class="nav-link text-dark" asp-controller="Home" asp-action="aboutus">About Us</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" href="/Home/contactus">Contact Us</a>
+                        <a class="nav-link text-dark" asp-controller="Home" asp-action="contactus">Contact Us</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" href="/Book/Getallbooks">All Books</a>
+                        <a class="nav-link text-dark" asp-controller="Book" asp-action="Getallbooks">All Books</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="Book" asp-action="AddNewBook">Add New Book</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">
