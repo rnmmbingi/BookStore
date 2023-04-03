@@ -6,11 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using System.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using BookStore.Repository;
 
 namespace BookStore
 {
@@ -20,10 +22,11 @@ namespace BookStore
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<BookStoreDbContext>(options =>options.UseSqlServer("Server=.;Database=BookStoreDb;Integrated Security=True;"));
+            services.AddDbContext<BookStoreDbContext>(options =>options.UseSqlServer("server=LAPTOP-1M4718O5\\RN;Database=BookStoreDb;Trusted_Connection=True"));
             services.AddControllersWithViews();
 #if DEBUG
             services.AddRazorPages().AddRazorRuntimeCompilation();
+            services.AddScoped<BookRepository, BookRepository>();
 #endif
         }
 
