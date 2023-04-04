@@ -17,7 +17,7 @@ namespace BookStore.Repository
 
         }
 
-        public async Task<int> AddNewBook(Books bookobj)
+        public async Task<int> AddNewBook(BookModel bookobj)
         {
             var newBook = new Books()
             {
@@ -26,28 +26,32 @@ namespace BookStore.Repository
                 TotalPages = bookobj.TotalPages.HasValue ? bookobj.TotalPages : 0 ,
                 CreatedOn = DateTime.Now,
                 UpdatedOn = DateTime.Now,
-                Description = bookobj.Description
+                Description = bookobj.Description,
+                LanguageId=bookobj.LanguageId
+                
+
             };
             await _bookStoreDbContext.AddAsync(newBook);
             await _bookStoreDbContext.SaveChangesAsync();
             return newBook.Id;
         }
-        public async Task<List<Books>> GetAllBooks()
+        public async Task<List<BookModel>> GetAllBooks()
         { 
-            var books = new List<Books>();
+            var books = new List<BookModel>();
             var allbooks = await _bookStoreDbContext.Books.ToListAsync();
             if(allbooks?.Any()==true)
             {
                 foreach (var book in allbooks)
                 {
-                    books.Add(new Books()
+                    books.Add(new BookModel()
                     {
                         Id=book.Id,
                         Title = book.Title,
                         Author = book.Author,
-                        TotalPages = book.TotalPages,
+                        TotalPages = book.TotalPages.HasValue? book.TotalPages: 0 ,
                         Category=book.Category,
-                        Language=book.Language,                    
+                        LanguageId = book.LanguageId, 
+                        
                         Description = book.Description
                     });
                     
@@ -56,40 +60,25 @@ namespace BookStore.Repository
             }
             return books;
         }
-        public async Task<Books> GetBook(int id)
+        public async Task<BookModel> GetBookById(int id)
         {
-            var book = await _bookStoreDbContext.Books.FindAsync(id);
-            if (book!=null)
-            {
-                var bookDetails = new Books()
+            return await _bookStoreDbContext.Books.Where(x => x.Id == id)
+                .Select(book => new BookModel()
                 {
-                    Id=book.Id,
+                    Id = book.Id,
                     Title = book.Title,
                     Author = book.Author,
                     TotalPages = book.TotalPages,
                     Category = book.Category,
-                    Language = book.Language,
-                    Description = book.Description
-                };
-                return bookDetails;
-            }
-            return null;
+                    LanguageId = book.LanguageId,
+                    Description = book.Description,
+                    Language = book.Language.Name,
+                }).FirstOrDefaultAsync();              
         }
         public List<BookModel> SearchBook(string title,string author)
         {
-            return DataSource().Where(x => x.Title.Contains(title) && x.Author.Contains(author)).ToList();
-        }
-        private List<BookModel> DataSource()
-        {
-            return new List<BookModel>()
-            {
-                new BookModel(){Id=1,Title="MVC",Author="Ramesh",Description="This description is for MVC book.",Category="Framework",Language="English",TotalPages=214},
-                new BookModel(){Id=2,Title="C#",Author="Ramesh",Description="This description is for C# book.",Category="Programming",Language="English",TotalPages=500},
-                new BookModel(){Id=3,Title="Java",Author="Rudra",Description="This description is for Java book.",Category="Concepts",Language="English",TotalPages=250},
-                new BookModel(){Id=4,Title="PHP",Author="Mahanvitha",Description="This description is for PHP book.",Category="Programming",Language="Hindi",TotalPages=321},
-                new BookModel(){Id=5,Title="SQL",Author="Navya",Description="This description is for SQL book.",Category="DataSource",Language="English",TotalPages=300},
-                new BookModel(){Id=6,Title="Azure Devops",Author="Ramesh",Description="This description is for Azure Devops book.",Category="Devops",Language="English",TotalPages=250}
-            };
-        }
+            return null;
+        }      
+
     }
 }
